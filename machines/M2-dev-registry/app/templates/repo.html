@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ name }} — PUL Container Registry</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0d12;--surface:#111620;--surface2:#171e2c;--border:#1e2d42;--border2:#253347;
+    --accent:#0ea5e9;--accent2:#38bdf8;--green:#10b981;--text:#e2e8f0;--muted:#64748b;
+    --muted2:#94a3b8;--mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;
+    display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .logo-icon{width:32px;height:32px;background:var(--accent);
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+  .logo-text{font-size:15px;font-weight:800;color:var(--text)}
+  .logo-sub{font-size:11px;color:var(--muted);font-family:var(--mono)}
+  .main{max-width:1280px;margin:0 auto;padding:32px}
+  .breadcrumb{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:24px}
+  .breadcrumb a{color:var(--accent2);text-decoration:none}
+  .repo-header{margin-bottom:32px}
+  .repo-title{font-size:24px;font-weight:800;color:var(--text);font-family:var(--mono);margin-bottom:8px}
+  .repo-meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    padding:24px;margin-bottom:24px}
+  .section-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;
+    display:flex;align-items:center;gap:8px}
+  .dot{width:6px;height:6px;background:var(--accent);border-radius:50%}
+  .tag-item{display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:13px}
+  .tag-item:last-child{border-bottom:none}
+  .tag-name{color:var(--accent2)}
+  .tag-latest{font-size:10px;background:rgba(14,165,233,0.15);color:var(--accent);
+    border:1px solid rgba(14,165,233,0.3);padding:2px 7px;border-radius:3px;margin-left:8px}
+  .tag-cmd{font-family:var(--mono);font-size:11px;color:var(--muted);
+    background:var(--surface2);padding:4px 10px;border-radius:4px}
+  .pull-cmd{background:var(--surface2);border:1px solid var(--border2);
+    border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:12px;color:var(--muted2)}
+  .pull-cmd .cmd{color:var(--text);display:block;margin-bottom:6px}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="/ui/">
+    <div class="logo-icon"></div>
+    <div><div class="logo-text">PUL Container Registry</div><div class="logo-sub">NEXUS-IT DevOps Platform</div></div>
+  </a>
+</header>
+<main class="main">
+  <div class="breadcrumb"><a href="/ui/">Registry</a> / {{ name }}</div>
+  <div class="repo-header">
+    <div class="repo-title">{{ name }}</div>
+    <div class="repo-meta">Docker Image Repository &nbsp;·&nbsp; {{ tags|length }} tags</div>
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="dot"></span> Tags</div>
+    {% for tag in tags %}
+    <div class="tag-item">
+      <div>
+        <span class="tag-name">{{ tag }}</span>
+        {% if tag == 'latest' %}<span class="tag-latest">LATEST</span>{% endif %}
+      </div>
+      <code class="tag-cmd">docker pull 11.x.x.x:5000/{{ name }}:{{ tag }}</code>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="section">
+    <div class="section-title"><span class="dot"></span> Registry API</div>
+    <div class="pull-cmd">
+      <span class="cmd">GET /v2/{{ name }}/manifests/latest</span>
+      <span>Returns OCI manifest with config digest for image inspection</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

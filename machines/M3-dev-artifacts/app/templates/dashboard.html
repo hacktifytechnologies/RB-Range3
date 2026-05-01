@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUL Build Artifact Store — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#f0f4f8;--white:#fff;--blue:#0369a1;--blue2:#0284c7;--dark:#0f172a;
+    --text:#1e293b;--muted:#64748b;--border:#e2e8f0;--green:#059669;--amber:#d97706;
+    --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);font-family:var(--sans);min-height:100vh}
+  .header{background:var(--dark);padding:0 32px;height:56px;
+    display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo-icon{width:28px;height:28px;background:var(--blue2);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
+  .logo-text{font-size:14px;font-weight:600;color:#fff;font-family:var(--mono)}
+  .header-right{display:flex;align-items:center;gap:16px}
+  .user-pill{font-family:var(--mono);font-size:11px;color:#94a3b8;
+    background:rgba(255,255,255,0.07);padding:5px 12px;border-radius:20px}
+  .logout{font-family:var(--mono);font-size:11px;color:#64748b;text-decoration:none}
+  .logout:hover{color:#fff}
+  .main{max-width:1280px;margin:0 auto;padding:32px}
+  .page-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:8px}
+  .page-sub{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:32px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+  .stat{background:var(--white);border-radius:10px;border:1px solid var(--border);
+    padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.04)}
+  .stat-label{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;
+    letter-spacing:0.8px;margin-bottom:8px}
+  .stat-value{font-size:26px;font-weight:700;color:var(--text)}
+  .bucket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .bucket-card{background:var(--white);border-radius:10px;border:1px solid var(--border);
+    overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.04);transition:box-shadow 0.2s}
+  .bucket-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+  .bucket-header{padding:20px;display:flex;align-items:flex-start;justify-content:space-between}
+  .bucket-icon{font-size:24px;margin-bottom:10px}
+  .bucket-name{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+  .bucket-meta{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .bucket-badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;font-weight:600}
+  .badge-public{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+  .badge-private{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+  .bucket-footer{padding:12px 20px;border-top:1px solid var(--border);
+    background:#f8fafc;display:flex;align-items:center;justify-content:space-between}
+  .bucket-count{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .btn-browse{font-family:var(--mono);font-size:11px;color:var(--blue);
+    text-decoration:none;font-weight:600}
+  .btn-browse:hover{text-decoration:underline}
+  .api-info{margin-top:32px;background:var(--white);border-radius:10px;
+    border:1px solid var(--border);border-left:4px solid var(--blue2);padding:20px 24px}
+  .api-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+  .api-line{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:6px}
+  .api-line code{color:var(--blue);background:#eff6ff;padding:2px 6px;border-radius:3px}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="/dashboard">
+    <div class="logo-icon">▲</div>
+    <div class="logo-text">PUL Build Artifact Store</div>
+  </a>
+  <div class="header-right">
+    <span class="user-pill">{{ user.name }} ({{ user.role }})</span>
+    <a class="logout" href="/logout">Sign Out</a>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page-title">Bucket Overview</div>
+  <div class="page-sub">artifacts.prabalurja.in — NEXUS-IT S3-Compatible Object Storage</div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Buckets</div><div class="stat-value">{{ buckets|length }}</div></div>
+    <div class="stat"><div class="stat-label">Total Objects</div><div class="stat-value">{{ buckets|sum(attribute='objects') }}</div></div>
+    <div class="stat"><div class="stat-label">Storage</div><div class="stat-value">~2.1 GB</div></div>
+    <div class="stat"><div class="stat-label">Public Buckets</div><div class="stat-value">{{ buckets|selectattr('public')|list|length }}</div></div>
+  </div>
+
+  <div class="bucket-grid">
+    {% for b in buckets %}
+    <div class="bucket-card">
+      <div class="bucket-header">
+        <div>
+          <div class="bucket-icon">🗃️</div>
+          <div class="bucket-name">{{ b.name }}</div>
+          <div class="bucket-meta">Created: {{ b.created }}</div>
+        </div>
+        <span class="bucket-badge {% if b.public %}badge-public{% else %}badge-private{% endif %}">
+          {% if b.public %}⚠ PUBLIC{% else %}🔒 PRIVATE{% endif %}
+        </span>
+      </div>
+      <div class="bucket-footer">
+        <span class="bucket-count">{{ b.objects }} object{% if b.objects != 1 %}s{% endif %}</span>
+        <a class="btn-browse" href="/browser/{{ b.name }}">Browse →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="api-info">
+    <div class="api-title">S3 API Access</div>
+    <div class="api-line">Public buckets: <code>GET http://11.x.x.x:9000/&lt;bucket&gt;/</code> — No auth required</div>
+    <div class="api-line">Private buckets: <code>Authorization: AWS4-HMAC-SHA256 Credential=&lt;access-key&gt;/...</code></div>
+    <div class="api-line">List objects: <code>GET /&lt;bucket&gt;/?list-type=2</code></div>
+    <div class="api-line">Get object: <code>GET /&lt;bucket&gt;/&lt;key&gt;</code></div>
+  </div>
+</main>
+</body>
+</html>

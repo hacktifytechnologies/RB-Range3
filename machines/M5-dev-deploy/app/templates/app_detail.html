@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{{ application.name }} — PUL Deploy Commander</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060a06;--surface:#0d130d;--surface2:#111811;--border:#1a2e1a;--border2:#234023;
+    --green:#39d353;--green2:#2ea043;--green3:#56d364;--dim:#1b2d1b;
+    --text:#b3d4b3;--muted:#4d7a4d;--white:#e8f5e8;--amber:#d4a017;--red:#da3633;
+    --mono:'Share Tech Mono',monospace;--sans:'Rajdhani',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans)}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);
+    padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-family:var(--mono);font-size:13px;color:var(--white);letter-spacing:1px;text-decoration:none}
+  .header-right{display:flex;gap:16px;align-items:center}
+  .user-tag{font-family:var(--mono);font-size:10px;color:var(--muted)}
+  .logout{font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none}
+  .main{max-width:1200px;margin:0 auto;padding:32px}
+  .breadcrumb{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:20px}
+  .breadcrumb a{color:var(--green3);text-decoration:none}
+  .page-title{font-family:var(--mono);font-size:18px;color:var(--white);margin-bottom:6px}
+  .page-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:28px}
+  .section{background:var(--surface);border:1px solid var(--border2);border-radius:4px;
+    margin-bottom:20px;overflow:hidden}
+  .sec-hd{padding:14px 20px;border-bottom:1px solid var(--border);
+    font-family:var(--mono);font-size:12px;color:var(--green3);letter-spacing:1px;text-transform:uppercase}
+  .sec-body{padding:20px}
+  .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .meta-row{font-family:var(--mono);font-size:12px;line-height:1.6}
+  .meta-row .lbl{color:var(--muted)}
+  .meta-row .val{color:var(--text)}
+  .sync-area{display:flex;align-items:flex-start;gap:24px}
+  .sync-info{flex:1;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.7}
+  .sync-info code{color:var(--green3)}
+  .sync-btn-big{background:var(--dim);border:1px solid var(--green2);border-radius:2px;
+    padding:12px 24px;font-family:var(--mono);font-size:12px;color:var(--green2);
+    cursor:pointer;letter-spacing:1.5px;text-transform:uppercase;display:inline-block}
+  .sync-btn-big:hover{background:rgba(57,211,83,0.1)}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="/dashboard">▶ PUL DEPLOY COMMANDER</a>
+  <div class="header-right">
+    <span class="user-tag">{{ user.name }}</span>
+    <a class="logout" href="/logout">LOGOUT</a>
+  </div>
+</header>
+<main class="main">
+  <div class="breadcrumb"><a href="/dashboard">Applications</a> / {{ application.name }}</div>
+  <div class="page-title">{{ application.name }}</div>
+  <div class="page-sub">namespace: {{ application.namespace }} · destination: {{ application.destination }}</div>
+
+  <div class="section">
+    <div class="sec-hd">Application Details</div>
+    <div class="sec-body">
+      <div class="meta-grid">
+        <div class="meta-row"><span class="lbl">STATUS: </span><span class="val">{{ application.status }}</span></div>
+        <div class="meta-row"><span class="lbl">HEALTH: </span><span class="val">{{ application.health }}</span></div>
+        <div class="meta-row"><span class="lbl">REPO: </span><span class="val">{{ application.repo }}</span></div>
+        <div class="meta-row"><span class="lbl">REVISION: </span><span class="val">{{ application.target_revision }}</span></div>
+        <div class="meta-row"><span class="lbl">DESTINATION: </span><span class="val">{{ application.destination }}</span></div>
+        <div class="meta-row"><span class="lbl">LAST SYNC: </span><span class="val">{{ application.last_sync[:10] }}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-hd">Sync Operations</div>
+    <div class="sec-body">
+      <div class="sync-area">
+        <div class="sync-info">
+          Trigger a sync to apply the latest Git revision to the cluster.<br>
+          <code>POST /api/applications/{{ application.name }}/sync</code><br>
+          Add <code>?dryRun=true</code> to preview the full resolved Kubernetes manifest without applying changes.
+        </div>
+        <a class="sync-btn-big" href="#">▶ SYNC</a>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

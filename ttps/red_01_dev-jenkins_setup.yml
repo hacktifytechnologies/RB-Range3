@@ -1,0 +1,21 @@
+id: dev01-m01-jenkins-anon-access
+name: GRIDFALL-Setup-M1-JenkinsAnonAccess
+description: >
+  KAAL CHAKRA operator Rudra-7 identifies a Jenkins CI/CD instance on the PUL VIKAS TANTRA
+  development network. Jenkins is running with authentication disabled (useSecurity=false),
+  exposing all build jobs and archived artefacts to unauthenticated clients. The
+  pul-firmware-build job has an archived deployment bundle containing Docker registry
+  credentials. This TTP verifies the challenge environment is active.
+tactic: initial-access
+technique_id: T1190
+technique_name: Exploit Public-Facing Application
+sub_technique: "N/A"
+tag: range
+executors:
+  - name: sh
+    platform: linux
+    command: |
+      chmod 644 /var/lib/jenkins/jobs/pul-firmware-build/builds/1/archive/deploy-bundle/docker-config.json 2>/dev/null || true
+      systemctl is-active jenkins && echo "CHALLENGE_ACTIVE: M1-dev-jenkins" || echo "WARN: Jenkins not running"
+    payloads: []
+    parsers: []

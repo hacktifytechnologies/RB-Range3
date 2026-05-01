@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PUL Deploy Commander — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060a06;--surface:#0d130d;--surface2:#111811;--border:#1a2e1a;--border2:#234023;
+    --green:#39d353;--green2:#2ea043;--green3:#56d364;--dim:#1b2d1b;
+    --text:#b3d4b3;--muted:#4d7a4d;--white:#e8f5e8;--amber:#d4a017;--red:#da3633;
+    --mono:'Share Tech Mono',monospace;--sans:'Rajdhani',sans-serif;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans)}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);
+    padding:0 32px;height:52px;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:100}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo-icon{font-size:16px;color:var(--green)}
+  .logo-text{font-family:var(--mono);font-size:13px;color:var(--white);letter-spacing:1px}
+  .header-right{display:flex;align-items:center;gap:16px}
+  .status-pill{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--green);
+    background:rgba(57,211,83,0.08);border:1px solid rgba(57,211,83,0.2);padding:4px 10px;border-radius:2px}
+  .status-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:p 2s infinite}
+  @keyframes p{0%,100%{opacity:1}50%{opacity:0.3}}
+  .user-tag{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px}
+  .logout{font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;letter-spacing:1px}
+  .logout:hover{color:var(--green)}
+  .main{max-width:1200px;margin:0 auto;padding:32px}
+  .page-hd{margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:20px}
+  .page-title{font-size:20px;font-weight:700;color:var(--white);letter-spacing:1px;font-family:var(--mono)}
+  .page-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.5px}
+  .cluster-info{display:flex;gap:24px;margin-top:12px}
+  .ci{font-family:var(--mono);font-size:11px}
+  .ci .label{color:var(--muted)}
+  .ci .val{color:var(--green3)}
+  .apps{display:grid;gap:16px}
+  .app-card{background:var(--surface);border:1px solid var(--border2);border-radius:4px;
+    overflow:hidden;transition:border-color 0.2s}
+  .app-card:hover{border-color:var(--green2)}
+  .app-head{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--border)}
+  .app-name{font-family:var(--mono);font-size:14px;color:var(--white)}
+  .app-name a{color:inherit;text-decoration:none}
+  .app-name a:hover{color:var(--green3)}
+  .app-ns{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:4px}
+  .badges{display:flex;gap:8px}
+  .badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:2px;letter-spacing:0.5px}
+  .badge-synced{background:rgba(57,211,83,0.1);color:var(--green);border:1px solid rgba(57,211,83,0.3)}
+  .badge-healthy{background:rgba(57,211,83,0.1);color:var(--green3);border:1px solid rgba(57,211,83,0.2)}
+  .badge-outofsync{background:rgba(212,160,23,0.1);color:var(--amber);border:1px solid rgba(212,160,23,0.3)}
+  .badge-degraded{background:rgba(218,54,51,0.1);color:var(--red);border:1px solid rgba(218,54,51,0.3)}
+  .app-body{padding:14px 20px;display:flex;gap:32px}
+  .app-meta{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.8}
+  .app-meta .val{color:var(--text)}
+  .sync-btn{background:var(--dim);border:1px solid var(--border2);border-radius:2px;
+    padding:8px 16px;font-family:var(--mono);font-size:11px;color:var(--green2);
+    cursor:pointer;letter-spacing:1px;text-transform:uppercase;text-decoration:none;display:inline-block}
+  .sync-btn:hover{background:rgba(57,211,83,0.1);border-color:var(--green2)}
+  .api-hint{margin-top:32px;background:var(--surface);border:1px solid var(--border);
+    border-left:3px solid var(--green2);border-radius:4px;padding:16px 20px;
+    font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.8}
+  .api-hint code{color:var(--green3)}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="/dashboard">
+    <span class="logo-icon">▶</span>
+    <span class="logo-text">PUL DEPLOY COMMANDER</span>
+  </a>
+  <div class="header-right">
+    <div class="status-pill"><div class="status-dot"></div>193.x.x.x CONNECTED</div>
+    <span class="user-tag">{{ user.name }}</span>
+    <a class="logout" href="/logout">LOGOUT</a>
+  </div>
+</header>
+<main class="main">
+  <div class="page-hd">
+    <div class="page-title">APPLICATION DEPLOYMENTS</div>
+    <div class="cluster-info">
+      <div class="ci"><span class="label">CLUSTER: </span><span class="val">193.x.x.x:6443</span></div>
+      <div class="ci"><span class="label">NAMESPACE: </span><span class="val">pul-production</span></div>
+      <div class="ci"><span class="label">MANAGED: </span><span class="val">{{ applications|length }} apps</span></div>
+    </div>
+  </div>
+  <div class="apps">
+    {% for app in applications %}
+    <div class="app-card">
+      <div class="app-head">
+        <div>
+          <div class="app-name"><a href="/app/{{ app.name }}">{{ app.name }}</a></div>
+          <div class="app-ns">ns/{{ app.namespace }}</div>
+        </div>
+        <div class="badges">
+          <span class="badge {% if app.status == 'Synced' %}badge-synced{% else %}badge-outofsync{% endif %}">{{ app.status.upper() }}</span>
+          <span class="badge {% if app.health == 'Healthy' %}badge-healthy{% else %}badge-degraded{% endif %}">{{ app.health.upper() }}</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="app-meta">
+          <div><span class="label">DEST: </span><span class="val">{{ app.destination }}</span></div>
+          <div><span class="label">REPO: </span><span class="val">{{ app.repo }}</span></div>
+          <div><span class="label">LAST SYNC: </span><span class="val">{{ app.last_sync[:10] }}</span></div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center">
+          <a class="sync-btn" href="/app/{{ app.name }}">▶ DETAILS</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="api-hint">
+    API: <code>GET /api/applications</code> · <code>POST /api/applications/&lt;name&gt;/sync?dryRun=true</code>
+    &nbsp;|&nbsp; Auth: <code>Authorization: Bearer &lt;token&gt;</code>
+    &nbsp;|&nbsp; Dry-run returns full resolved K8s manifest
+  </div>
+</main>
+</body>
+</html>

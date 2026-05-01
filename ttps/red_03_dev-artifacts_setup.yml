@@ -1,0 +1,19 @@
+id: dev01-m03-artifacts-public-bucket
+name: GRIDFALL-Setup-M3-ArtifactsPublicBucket
+description: >
+  The PUL Build Artifact Store has a misconfigured public-read ACL on the pul-code-reports
+  bucket, allowing unauthenticated listing and download. The bucket contains
+  sonar-integration/sonarqube-access.env with the SonarQube admin token.
+tactic: collection
+technique_id: T1530
+technique_name: Data from Cloud Storage Object
+sub_technique: "N/A"
+tag: range
+executors:
+  - name: sh
+    platform: linux
+    command: |
+      chmod 644 /opt/pul-artifacts/app/app.py 2>/dev/null || true
+      systemctl is-active pul-artifacts && echo "CHALLENGE_ACTIVE: M3-dev-artifacts" || echo "WARN: Artifact store not running"
+    payloads: []
+    parsers: []

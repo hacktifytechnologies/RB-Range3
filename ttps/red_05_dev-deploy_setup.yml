@@ -1,0 +1,19 @@
+id: dev01-m05-deploy-dryrun-manifest
+name: GRIDFALL-Setup-M5-DeployDryRunManifest
+description: >
+  The PUL Deploy Commander sync API accepts dryRun=true, returning the full resolved
+  Kubernetes manifest including a ServiceAccount token Secret. The token grants access
+  to the production Kubernetes cluster at 193.x.x.x:6443, enabling pivot to RNG-CLD-01.
+tactic: exfiltration
+technique_id: T1552
+technique_name: Unsecured Credentials
+sub_technique: "Credentials in Files"
+tag: range
+executors:
+  - name: sh
+    platform: linux
+    command: |
+      chmod 644 /opt/pul-deploy/app/app.py 2>/dev/null || true
+      systemctl is-active pul-deploy && echo "CHALLENGE_ACTIVE: M5-dev-deploy" || echo "WARN: Deploy commander not running"
+    payloads: []
+    parsers: []

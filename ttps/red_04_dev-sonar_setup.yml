@@ -1,0 +1,19 @@
+id: dev01-m04-sonar-token-disclosure
+name: GRIDFALL-Setup-M4-SonarTokenDisclosure
+description: >
+  The PUL Code Intelligence Portal settings API returns CI/CD integration configuration
+  including the Deploy Commander API token in plain text under sonar.ci.deploy_token.
+  The token was hardcoded as a temporary measure instead of being managed by Vault.
+tactic: credential-access
+technique_id: T1552
+technique_name: Unsecured Credentials
+sub_technique: "Credentials in Registry"
+tag: range
+executors:
+  - name: sh
+    platform: linux
+    command: |
+      chmod 644 /opt/pul-sonar/app/app.py 2>/dev/null || true
+      systemctl is-active pul-sonar && echo "CHALLENGE_ACTIVE: M4-dev-sonar" || echo "WARN: Sonar portal not running"
+    payloads: []
+    parsers: []

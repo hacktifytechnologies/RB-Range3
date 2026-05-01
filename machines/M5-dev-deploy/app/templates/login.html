@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PUL Deploy Commander — Authentication</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060a06;--surface:#0d130d;--surface2:#111811;--border:#1a2e1a;--border2:#234023;
+    --green:#39d353;--green2:#2ea043;--green3:#56d364;--dim:#1b2d1b;
+    --text:#b3d4b3;--muted:#4d7a4d;--white:#e8f5e8;--amber:#d4a017;--red:#da3633;
+    --mono:'Share Tech Mono',monospace;--sans:'Rajdhani',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);font-family:var(--sans);min-height:100vh;
+    display:flex;flex-direction:column;
+    background-image:linear-gradient(180deg,rgba(57,211,83,0.03) 0%,transparent 100%)}
+  .top-bar{background:var(--surface);border-bottom:1px solid var(--border);
+    padding:0 32px;height:44px;display:flex;align-items:center;justify-content:space-between}
+  .top-logo{font-family:var(--mono);font-size:13px;color:var(--green);
+    display:flex;align-items:center;gap:10px;letter-spacing:2px}
+  .blink{animation:blink 1.2s step-end infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .top-meta{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px}
+  .main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px}
+  .card{background:var(--surface);border:1px solid var(--border2);border-radius:4px;
+    width:100%;max-width:440px;overflow:hidden;
+    box-shadow:0 0 40px rgba(57,211,83,0.05)}
+  .card-header{background:var(--dim);border-bottom:1px solid var(--border2);
+    padding:20px 24px;display:flex;align-items:center;gap:14px}
+  .header-icon{width:36px;height:36px;border:2px solid var(--green2);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:16px;color:var(--green)}
+  .header-text .title{font-size:17px;font-weight:700;color:var(--white);letter-spacing:0.5px}
+  .header-text .sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+  .card-body{padding:28px}
+  .field{margin-bottom:18px}
+  label{display:block;font-family:var(--mono);font-size:11px;color:var(--muted);
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+  input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:2px;
+    padding:11px 14px;font-family:var(--mono);font-size:13px;color:var(--green3);outline:none;
+    transition:border-color 0.2s;letter-spacing:0.5px}
+  input:focus{border-color:var(--green);box-shadow:0 0 8px rgba(57,211,83,0.1)}
+  input::placeholder{color:var(--muted)}
+  .btn{width:100%;background:var(--green2);color:var(--white);border:none;border-radius:2px;
+    padding:13px;font-family:var(--mono);font-size:13px;font-weight:600;cursor:pointer;
+    letter-spacing:2px;text-transform:uppercase;transition:background 0.2s;margin-top:8px}
+  .btn:hover{background:var(--green)}
+  .error{background:rgba(218,54,51,0.08);border:1px solid rgba(218,54,51,0.3);
+    border-left:3px solid var(--red);padding:10px 14px;
+    font-family:var(--mono);font-size:12px;color:var(--red);margin-bottom:16px}
+  .divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+  .api-note{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7}
+  .api-note code{color:var(--green3)}
+  .status-bar{padding:12px 24px;border-top:1px solid var(--border);
+    display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted)}
+  .status-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-logo">▶ PUL DEPLOY COMMANDER <span class="blink">_</span></div>
+  <div class="top-meta">NEXUS-IT // PRABAL URJA LIMITED // v2.4.1</div>
+</div>
+<div class="main">
+  <div class="card">
+    <div class="card-header">
+      <div class="header-icon">⬡</div>
+      <div class="header-text">
+        <div class="title">AUTHENTICATION REQUIRED</div>
+        <div class="sub">deploy.prabalurja.in // RESTRICTED ACCESS</div>
+      </div>
+    </div>
+    <div class="card-body">
+      {% if error %}<div class="error">✗ {{ error }}</div>{% endif %}
+      <form method="POST">
+        <div class="field">
+          <label>Operator ID</label>
+          <input type="text" name="username" placeholder="username" autocomplete="off" required>
+        </div>
+        <div class="field">
+          <label>Auth Code</label>
+          <input type="password" name="password" placeholder="••••••••••••" required>
+        </div>
+        <button class="btn" type="submit">▶ AUTHENTICATE</button>
+      </form>
+      <hr class="divider">
+      <div class="api-note">
+        API Bearer auth:<br>
+        <code>Authorization: Bearer &lt;token&gt;</code><br>
+        Endpoint: <code>POST /api/applications/&lt;name&gt;/sync</code>
+      </div>
+    </div>
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      CLUSTER CONNECTED // 193.x.x.x:6443 // pul-production
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PUL Code Intelligence — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;
+    --teal:#00b4d8;--teal2:#48cae4;--teal3:#90e0ef;
+    --text:#c9d1d9;--muted:#8b949e;--white:#f0f6fc;
+    --green:#3fb950;--amber:#d29922;--red:#f85149;
+    --sans:'Space Grotesk',sans-serif;--mono:'Fira Code',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);font-family:var(--sans);min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background-image:radial-gradient(ellipse at 20% 50%,rgba(0,180,216,0.06) 0%,transparent 60%),
+                    radial-gradient(ellipse at 80% 20%,rgba(0,180,216,0.04) 0%,transparent 50%)}
+  .wrap{width:100%;max-width:420px;padding:24px}
+  .logo-area{text-align:center;margin-bottom:32px}
+  .logo-badge{display:inline-flex;align-items:center;gap:10px;margin-bottom:16px}
+  .logo-hex{width:40px;height:40px;background:var(--teal);
+    clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:700;color:#fff}
+  .logo-name{font-size:20px;font-weight:700;color:var(--white);letter-spacing:-0.5px}
+  .logo-sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.5px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .card-header{padding:24px 28px;border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg,var(--surface2) 0%,var(--surface) 100%)}
+  .card-title{font-size:16px;font-weight:600;color:var(--white);margin-bottom:4px}
+  .card-sub{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .card-body{padding:28px}
+  .field{margin-bottom:18px}
+  label{display:block;font-size:12px;font-weight:500;color:var(--muted);
+    font-family:var(--mono);letter-spacing:0.5px;margin-bottom:8px;text-transform:uppercase}
+  input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;
+    padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--sans);outline:none;
+    transition:border-color 0.2s}
+  input:focus{border-color:var(--teal)}
+  .btn{width:100%;background:var(--teal);color:#fff;border:none;border-radius:6px;
+    padding:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--sans);
+    transition:opacity 0.2s;margin-top:6px}
+  .btn:hover{opacity:0.85}
+  .error{background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.4);
+    border-radius:6px;padding:10px 14px;font-size:13px;color:var(--red);
+    font-family:var(--mono);margin-bottom:16px}
+  .alt-login{margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+  .alt-label{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+  .token-input{width:100%;background:var(--bg);border:1px solid var(--border);
+    border-radius:6px;padding:10px 14px;font-size:12px;color:var(--muted2,#8b949e);
+    font-family:var(--mono);color:var(--muted)}
+  .footer{text-align:center;margin-top:24px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo-area">
+    <div class="logo-badge">
+      <div class="logo-hex">◈</div>
+      <div class="logo-name">Code Intelligence</div>
+    </div>
+    <div class="logo-sub">PUL NEXUS-IT | sonar.prabalurja.in</div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Sign In</div>
+      <div class="card-sub">Prabal Urja Limited — DevSecOps Platform</div>
+    </div>
+    <div class="card-body">
+      {% if error %}<div class="error">⚠ {{ error }}</div>{% endif %}
+      <form method="POST">
+        <div class="field">
+          <label>Username</label>
+          <input type="text" name="username" placeholder="username" autocomplete="off" required>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="••••••••••" required>
+        </div>
+        <button class="btn" type="submit">Sign In</button>
+      </form>
+      <div class="alt-login">
+        <div class="alt-label">API Token Authentication</div>
+        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6">
+          Use token as HTTP header:<br>
+          <code style="color:var(--teal2)">Authorization: Bearer &lt;token&gt;</code>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">SonarQube-compatible API · v10.3.0 · devops@prabalurja.in</div>
+</div>
+</body>
+</html>

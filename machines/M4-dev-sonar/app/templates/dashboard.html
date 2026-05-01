@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PUL Code Intelligence — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;
+    --teal:#00b4d8;--teal2:#48cae4;--text:#c9d1d9;--muted:#8b949e;--white:#f0f6fc;
+    --green:#3fb950;--amber:#d29922;--red:#f85149;
+    --sans:'Space Grotesk',sans-serif;--mono:'Fira Code',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans)}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);
+    padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:100}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo-hex{width:28px;height:28px;background:var(--teal);
+    clip-path:polygon(25% 0%,75% 0%,100% 50%,75% 100%,25% 100%,0% 50%);
+    display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff}
+  .logo-text{font-size:14px;font-weight:700;color:var(--white)}
+  .header-right{display:flex;align-items:center;gap:16px}
+  .user-tag{font-family:var(--mono);font-size:11px;color:var(--muted);
+    background:var(--surface2);padding:4px 12px;border-radius:20px;border:1px solid var(--border)}
+  .logout{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none}
+  .logout:hover{color:var(--teal)}
+  .main{max-width:1200px;margin:0 auto;padding:32px}
+  .page-hd{margin-bottom:28px}
+  .page-title{font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px}
+  .page-sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+  .proj-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+    overflow:hidden;transition:border-color 0.2s}
+  .proj-card:hover{border-color:var(--teal)}
+  .proj-head{padding:20px;border-bottom:1px solid var(--border)}
+  .proj-name{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px}
+  .proj-name a{color:inherit;text-decoration:none}
+  .proj-name a:hover{color:var(--teal2)}
+  .proj-key{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .proj-metrics{padding:16px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .metric{text-align:center}
+  .metric-val{font-size:20px;font-weight:700;color:var(--white)}
+  .metric-val.red{color:var(--red)}
+  .metric-val.amber{color:var(--amber)}
+  .metric-val.green{color:var(--green)}
+  .metric-label{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;margin-top:4px}
+  .proj-footer{padding:12px 20px;border-top:1px solid var(--border);background:rgba(255,255,255,0.02);
+    display:flex;align-items:center;justify-content:space-between}
+  .gate-ok{font-size:11px;font-weight:600;color:var(--green);font-family:var(--mono)}
+  .gate-warn{font-size:11px;font-weight:600;color:var(--amber);font-family:var(--mono)}
+  .last-analysis{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .api-panel{margin-top:32px;background:var(--surface);border:1px solid var(--border);
+    border-left:3px solid var(--teal);border-radius:8px;padding:20px 24px}
+  .api-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:12px}
+  .api-ep{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.6}
+  .api-ep code{color:var(--teal2);background:rgba(0,180,216,0.08);padding:2px 6px;border-radius:3px}
+</style>
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="/dashboard">
+    <div class="logo-hex">◈</div>
+    <span class="logo-text">PUL Code Intelligence</span>
+  </a>
+  <div class="header-right">
+    <span class="user-tag">{{ user.name }}</span>
+    <a class="logout" href="/logout">Sign Out</a>
+  </div>
+</header>
+<main class="main">
+  <div class="page-hd">
+    <div class="page-title">Projects</div>
+    <div class="page-sub">PUL NEXUS-IT Code Quality & Security Analysis Platform</div>
+  </div>
+  <div class="proj-grid">
+    {% for p in projects %}
+    <div class="proj-card">
+      <div class="proj-head">
+        <div class="proj-name"><a href="/project/{{ p.key }}">{{ p.name }}</a></div>
+        <div class="proj-key">{{ p.key }}</div>
+      </div>
+      <div class="proj-metrics">
+        <div class="metric">
+          <div class="metric-val {% if p.measures.bugs > 0 %}red{% else %}green{% endif %}">{{ p.measures.bugs }}</div>
+          <div class="metric-label">Bugs</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val {% if p.measures.vulnerabilities > 0 %}amber{% else %}green{% endif %}">{{ p.measures.vulnerabilities }}</div>
+          <div class="metric-label">Vulnerabilities</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">{{ p.measures.coverage }}%</div>
+          <div class="metric-label">Coverage</div>
+        </div>
+      </div>
+      <div class="proj-footer">
+        <span class="{% if p.quality_gate.status == 'OK' %}gate-ok{% else %}gate-warn{% endif %}">
+          {% if p.quality_gate.status == 'OK' %}✓ Quality Gate Passed{% else %}⚠ Quality Gate Warning{% endif %}
+        </span>
+        <span class="last-analysis">{{ p.lastAnalysisDate[:10] }}</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="api-panel">
+    <div class="api-title">API Reference — Token Authentication</div>
+    <div class="api-ep">Projects: <code>GET /api/projects/search</code> — requires Bearer token</div>
+    <div class="api-ep">Settings: <code>GET /api/settings/values?component=&lt;key&gt;</code> — returns CI/CD integration config</div>
+    <div class="api-ep">Issues: <code>GET /api/issues/search?componentKeys=&lt;key&gt;</code></div>
+    <div class="api-ep">Auth: <code>Authorization: Bearer &lt;token&gt;</code> or <code>X-Sonar-Token: &lt;token&gt;</code></div>
+  </div>
+</main>
+</body>
+</html>

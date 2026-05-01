@@ -1,0 +1,20 @@
+id: dev01-m02-registry-unauth-api
+name: GRIDFALL-Setup-M2-RegistryUnauthAPI
+description: >
+  The PUL Container Registry exposes Docker Registry v2 API without authentication.
+  The pul/firmware-builder image config blob contains MinIO artifact store credentials
+  in its Env array, left over from a failed Vault integration. Operator Rudra-7
+  enumerates the catalogue and extracts credentials from the image blob.
+tactic: credential-access
+technique_id: T1552
+technique_name: Unsecured Credentials
+sub_technique: "Credentials in Files"
+tag: range
+executors:
+  - name: sh
+    platform: linux
+    command: |
+      chmod 644 /opt/pul-registry/app/app.py 2>/dev/null || true
+      systemctl is-active pul-registry && echo "CHALLENGE_ACTIVE: M2-dev-registry" || echo "WARN: Registry not running"
+    payloads: []
+    parsers: []

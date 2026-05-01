@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUL Container Registry — NEXUS-IT</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #111620;
+    --surface2: #171e2c;
+    --border: #1e2d42;
+    --border2: #253347;
+    --accent: #0ea5e9;
+    --accent2: #38bdf8;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --muted2: #94a3b8;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+  /* Header */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-icon {
+    width: 32px; height: 32px; background: var(--accent);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+  .logo-text { font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; }
+  .logo-sub { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .nav-pill {
+    font-family: var(--mono); font-size: 11px; color: var(--muted2);
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 5px 12px; border-radius: 20px; text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .nav-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .api-badge {
+    font-family: var(--mono); font-size: 10px;
+    background: rgba(14,165,233,0.12); color: var(--accent);
+    border: 1px solid rgba(14,165,233,0.3); padding: 4px 10px; border-radius: 4px;
+  }
+
+  /* Layout */
+  .main { max-width: 1280px; margin: 0 auto; padding: 32px; }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    margin-bottom: 32px;
+  }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px 24px;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .stat-label { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 800; color: var(--text); }
+  .stat-sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* Section */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .section-title { font-size: 16px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+  /* Repo table */
+  .repo-table { width: 100%; border-collapse: collapse; }
+  .repo-table thead tr {
+    border-bottom: 1px solid var(--border);
+  }
+  .repo-table th {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    padding: 12px 16px; text-align: left; font-weight: 500;
+  }
+  .repo-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .repo-table tbody tr:hover { background: var(--surface2); }
+  .repo-table td { padding: 16px; vertical-align: middle; }
+  .repo-name { font-family: var(--mono); font-size: 14px; color: var(--accent2); font-weight: 500; }
+  .repo-name a { color: inherit; text-decoration: none; }
+  .repo-name a:hover { text-decoration: underline; }
+  .repo-desc { font-size: 13px; color: var(--muted2); margin-top: 4px; }
+  .tag-count {
+    font-family: var(--mono); font-size: 12px;
+    background: var(--surface2); border: 1px solid var(--border2);
+    padding: 3px 8px; border-radius: 4px; color: var(--muted2);
+  }
+  .pull-count { font-family: var(--mono); font-size: 12px; color: var(--muted2); }
+  .size-badge {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    background: var(--surface2); padding: 3px 8px; border-radius: 4px;
+  }
+  .updated { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  /* API hint */
+  .api-hint {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px; padding: 16px 20px; margin-top: 32px;
+    font-family: var(--mono); font-size: 12px; color: var(--muted2);
+  }
+  .api-hint strong { color: var(--accent); }
+  .api-hint code { color: var(--text); background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 3px; }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-left { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .footer-right { font-size: 12px; color: var(--muted); }
+
+  /* Status dot */
+  .status-live {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 11px; color: var(--green);
+  }
+  .status-live::before {
+    content: ''; width: 6px; height: 6px; background: var(--green);
+    border-radius: 50%; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="/ui/">
+    <div class="logo-icon">▲</div>
+    <div>
+      <div class="logo-text">PUL Container Registry</div>
+      <div class="logo-sub">NEXUS-IT DevOps Platform</div>
+    </div>
+  </a>
+  <div class="header-right">
+    <span class="status-live">Registry Online</span>
+    <a class="nav-pill" href="/v2/_catalog">API</a>
+    <span class="api-badge">v2.0 · Docker Distribution API</span>
+  </div>
+</header>
+
+<main class="main">
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Repositories</div>
+      <div class="stat-value">{{ stats.repos }}</div>
+      <div class="stat-sub">Active image repos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Tags</div>
+      <div class="stat-value">{{ stats.tags }}</div>
+      <div class="stat-sub">Across all repos</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Pulls</div>
+      <div class="stat-value">{{ stats.total_pulls }}</div>
+      <div class="stat-sub">Lifetime pull count</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Storage Used</div>
+      <div class="stat-value">{{ stats.storage }}</div>
+      <div class="stat-sub">Registry storage</div>
+    </div>
+  </div>
+
+  <!-- Repository list -->
+  <div class="section-header">
+    <div class="section-title">
+      <span class="dot"></span>
+      Repositories
+    </div>
+  </div>
+
+  <table class="repo-table">
+    <thead>
+      <tr>
+        <th>Repository</th>
+        <th>Tags</th>
+        <th>Pulls</th>
+        <th>Size</th>
+        <th>Last Push</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for repo in repos %}
+      <tr>
+        <td>
+          <div class="repo-name"><a href="/ui/repo/{{ repo.name }}">{{ repo.name }}</a></div>
+          <div class="repo-desc">{{ repo.description }}</div>
+        </td>
+        <td><span class="tag-count">{{ repo.tags }} tags</span></td>
+        <td><span class="pull-count">{{ repo.pulls }}</span></td>
+        <td><span class="size-badge">{{ repo.size }}</span></td>
+        <td><span class="updated">{{ repo.updated }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="api-hint">
+    <strong>Registry API:</strong> This registry implements the <code>Docker Distribution API v2</code>.
+    Pull images: <code>docker pull 11.x.x.x:5000/pul/firmware-builder:latest</code> &nbsp;|&nbsp;
+    Catalogue: <code>GET /v2/_catalog</code> &nbsp;|&nbsp;
+    Manifest: <code>GET /v2/{name}/manifests/{tag}</code>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-left">
+      Prabal Urja Limited — NEXUS-IT DevOps Platform &nbsp;|&nbsp;
+      registry.prabalurja.in &nbsp;|&nbsp;
+      Maintained by: <a href="mailto:devops@prabalurja.in" style="color:var(--accent);text-decoration:none">devops@prabalurja.in</a>
+    </div>
+    <div class="footer-right">Docker Distribution API v2.0</div>
+  </footer>
+</main>
+
+</body>
+</html>

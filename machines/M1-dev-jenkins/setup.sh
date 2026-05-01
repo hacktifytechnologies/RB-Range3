@@ -5,6 +5,31 @@
 # Challenge: Jenkins Anonymous Read Access + Unauthenticated Artifact Download
 # MITRE: T1190 · T1552.001
 # Ubuntu 22.04 LTS — NO internet access required
+
+# Step 1 — Create devops user
+#sudo useradd -m -s /bin/bash devops
+
+# Step 2 — Set up .ssh directory
+#sudo mkdir -p /home/devops/.ssh
+#sudo chmod 700 /home/devops/.ssh
+
+# Step 3 — Get the public key FROM M5 VM and paste it below
+# On M5 run: cat /etc/pul-gridfall/jump_ed25519.pub
+# Then paste the output into this command on Range 3 VM1:
+#sudo bash -c 'echo "ssh-ed25519 AAAA...PASTE_FULL_KEY_HERE... devops@dev-jump.prabalurja.in GRIDFALL-2024" > /home/devops/.ssh/authorized_keys'
+
+# Step 4 — Fix permissions
+#sudo chmod 600 /home/devops/.ssh/authorized_keys
+#sudo chown -R devops:devops /home/devops/.ssh /home/devops
+
+# Step 5 — Enable pubkey auth (uncomment the line in sshd_config)
+#sudo sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+#sudo sed -i 's/#AuthorizedKeysFile/AuthorizedKeysFile/' /etc/ssh/sshd_config
+#sudo systemctl reload sshd
+
+# Step 6 — Verify
+#sudo cat /home/devops/.ssh/authorized_keys
+#id devops
 # =============================================================================
 set -euo pipefail
 

@@ -68,8 +68,8 @@ sudo bash machines/MX-dev-<slug>/setup.sh
 sudo bash Honeytraps/MX-decoy-dev-<slug>.sh
 ```
 
-### TTP YAML (Caldera)
-Each machine has a corresponding TTP YAML in `ttps/`. These are executed by Caldera post-VM-snapshot to perform minimal setup verification actions only — the full challenge setup is handled by `setup.sh`.
+### TTP YAML (AttackEngine)
+Each machine has a corresponding TTP YAML in `ttps/`. These are executed by AttackEngine post-VM-snapshot to perform minimal setup verification actions only — the full challenge setup is handled by `setup.sh`.
 
 ### Verification
 

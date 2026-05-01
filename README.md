@@ -1,4 +1,4 @@
-# RNG-DEV-01 · VIKAS TANTRA
+# RNG-DEV-01 
 ## OPERATION GRIDFALL — DevOps & CI/CD Zone
 ### Prabal Urja Limited (PUL) — NEXUS-IT Platform
 

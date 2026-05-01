@@ -4,78 +4,343 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ name }} — PUL Container Registry</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#0a0d12;--surface:#111620;--surface2:#171e2c;--border:#1e2d42;--border2:#253347;
-    --accent:#0ea5e9;--accent2:#38bdf8;--green:#10b981;--text:#e2e8f0;--muted:#64748b;
-    --muted2:#94a3b8;--mono:'JetBrains Mono',monospace;--sans:'Syne',sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
-  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;
-    display:flex;align-items:center;justify-content:space-between;height:60px;}
-  .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-  .logo-icon{width:32px;height:32px;background:var(--accent);
-    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
-  .logo-text{font-size:15px;font-weight:800;color:var(--text)}
-  .logo-sub{font-size:11px;color:var(--muted);font-family:var(--mono)}
-  .main{max-width:1280px;margin:0 auto;padding:32px}
-  .breadcrumb{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:24px}
-  .breadcrumb a{color:var(--accent2);text-decoration:none}
-  .repo-header{margin-bottom:32px}
-  .repo-title{font-size:24px;font-weight:800;color:var(--text);font-family:var(--mono);margin-bottom:8px}
-  .repo-meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
-  .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;
-    padding:24px;margin-bottom:24px}
-  .section-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:16px;
-    display:flex;align-items:center;gap:8px}
-  .dot{width:6px;height:6px;background:var(--accent);border-radius:50%}
-  .tag-item{display:flex;align-items:center;justify-content:space-between;
-    padding:12px 16px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:13px}
-  .tag-item:last-child{border-bottom:none}
-  .tag-name{color:var(--accent2)}
-  .tag-latest{font-size:10px;background:rgba(14,165,233,0.15);color:var(--accent);
-    border:1px solid rgba(14,165,233,0.3);padding:2px 7px;border-radius:3px;margin-left:8px}
-  .tag-cmd{font-family:var(--mono);font-size:11px;color:var(--muted);
-    background:var(--surface2);padding:4px 10px;border-radius:4px}
-  .pull-cmd{background:var(--surface2);border:1px solid var(--border2);
-    border-radius:6px;padding:14px 16px;font-family:var(--mono);font-size:12px;color:var(--muted2)}
-  .pull-cmd .cmd{color:var(--text);display:block;margin-bottom:6px}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0b0e14;
+  --bg2:       #0f1319;
+  --surface:   #13181f;
+  --surface2:  #181e27;
+  --surface3:  #1c2333;
+  --border:    #222c3c;
+  --border2:   #2a3850;
+  --accent:    #2f80ed;
+  --accent2:   #5ba3f5;
+  --accent3:   #93c5fd;
+  --green:     #22c55e;
+  --text:      #e2e8f0;
+  --text2:     #94a3b8;
+  --text3:     #64748b;
+  --mono:      'SF Mono', 'Fira Mono', 'Cascadia Code', 'Consolas', 'Liberation Mono', monospace;
+  --sans:      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #2f80ed 0%, #1d4ed8 100%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.logo-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.logo-sub   { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+
+.status-indicator {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 11px; color: var(--green);
+}
+
+.status-dot {
+  width: 7px; height: 7px; background: var(--green);
+  border-radius: 50%; box-shadow: 0 0 6px var(--green);
+  animation: p 2.5s ease-in-out infinite;
+}
+@keyframes p { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+.main { max-width: 1240px; margin: 0 auto; padding: 32px 28px; }
+
+.breadcrumb {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.breadcrumb a { color: var(--accent2); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb-sep { color: var(--text3); }
+
+.repo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.repo-title {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.repo-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meta-sep { color: var(--border2); }
+
+.pull-cmd-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+  white-space: nowrap;
+  max-width: 400px;
+}
+.pull-cmd-box .cmd { color: var(--text); }
+
+.section-hd {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.section-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.section-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+.section-count {
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 2px 8px; border-radius: 10px;
+}
+
+.tags-table-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.tags-table { width: 100%; border-collapse: collapse; }
+
+.tags-table thead {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+
+.tags-table th {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 11px 20px;
+  text-align: left;
+}
+
+.tags-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+.tags-table tbody tr:last-child { border-bottom: none; }
+.tags-table tbody tr:hover { background: var(--surface2); }
+.tags-table td { padding: 14px 20px; vertical-align: middle; }
+
+.tag-name-wrap { display: flex; align-items: center; gap: 8px; }
+
+.tag-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent2);
+  font-weight: 500;
+}
+
+.badge-latest {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(47,128,237,0.12);
+  border: 1px solid rgba(47,128,237,0.3);
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.pull-snippet {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.api-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 18px 22px;
+}
+
+.api-panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
+.api-rows { display: flex; flex-direction: column; gap: 8px; }
+
+.api-row {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: var(--mono); font-size: 11px; color: var(--text3);
+}
+.api-method { color: var(--accent2); font-weight: 600; min-width: 32px; }
+.api-path {
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
 </style>
 </head>
 <body>
-<header class="header">
+
+<header class="topbar">
   <a class="logo" href="/ui/">
-    <div class="logo-icon"></div>
-    <div><div class="logo-text">PUL Container Registry</div><div class="logo-sub">NEXUS-IT DevOps Platform</div></div>
+    <div class="logo-mark"></div>
+    <div>
+      <div class="logo-title">PUL Container Registry</div>
+      <div class="logo-sub">NEXUS-IT DevOps Platform</div>
+    </div>
   </a>
+  <div class="status-indicator">
+    <span class="status-dot"></span>
+    Registry Online
+  </div>
 </header>
+
 <main class="main">
-  <div class="breadcrumb"><a href="/ui/">Registry</a> / {{ name }}</div>
+
+  <div class="breadcrumb">
+    <a href="/ui/">Registry</a>
+    <span class="breadcrumb-sep">/</span>
+    <span style="color:var(--text2)">{{ name }}</span>
+  </div>
+
   <div class="repo-header">
-    <div class="repo-title">{{ name }}</div>
-    <div class="repo-meta">Docker Image Repository &nbsp;·&nbsp; {{ tags|length }} tags</div>
-  </div>
-  <div class="section">
-    <div class="section-title"><span class="dot"></span> Tags</div>
-    {% for tag in tags %}
-    <div class="tag-item">
-      <div>
-        <span class="tag-name">{{ tag }}</span>
-        {% if tag == 'latest' %}<span class="tag-latest">LATEST</span>{% endif %}
+    <div>
+      <div class="repo-title">{{ name }}</div>
+      <div class="repo-meta">
+        <span>Docker Image Repository</span>
+        <span class="meta-sep">·</span>
+        <span>{{ tags|length }} tags</span>
+        <span class="meta-sep">·</span>
+        <span>registry.prabalurja.in</span>
       </div>
-      <code class="tag-cmd">docker pull 11.x.x.x:5000/{{ name }}:{{ tag }}</code>
     </div>
-    {% endfor %}
-  </div>
-  <div class="section">
-    <div class="section-title"><span class="dot"></span> Registry API</div>
-    <div class="pull-cmd">
-      <span class="cmd">GET /v2/{{ name }}/manifests/latest</span>
-      <span>Returns OCI manifest with config digest for image inspection</span>
+    <div class="pull-cmd-box">
+      <span style="color:var(--text3)">Pull: </span>
+      <span class="cmd">docker pull 11.x.x.x:5000/{{ name }}:latest</span>
     </div>
   </div>
+
+  <!-- Tags -->
+  <div class="section-hd">
+    <span class="section-dot"></span>
+    <span class="section-title">Tags</span>
+    <span class="section-count">{{ tags|length }}</span>
+  </div>
+
+  <div class="tags-table-wrap">
+    <table class="tags-table">
+      <thead>
+        <tr>
+          <th style="width:35%">Tag</th>
+          <th>Pull Command</th>
+          <th>Manifest API</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tag in tags %}
+        <tr>
+          <td>
+            <div class="tag-name-wrap">
+              <span class="tag-name">{{ tag }}</span>
+              {% if tag == 'latest' %}<span class="badge-latest">Latest</span>{% endif %}
+            </div>
+          </td>
+          <td>
+            <span class="pull-snippet">docker pull 11.x.x.x:5000/{{ name }}:{{ tag }}</span>
+          </td>
+          <td>
+            <span class="pull-snippet">GET /v2/{{ name }}/manifests/{{ tag }}</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- API reference -->
+  <div class="api-panel">
+    <div class="api-panel-title">Image Inspection via Registry API</div>
+    <div class="api-rows">
+      <div class="api-row">
+        <span class="api-method">GET</span>
+        <span class="api-path">/v2/{{ name }}/manifests/latest</span>
+        <span style="color:var(--text3)">Returns OCI manifest — note the config.digest field</span>
+      </div>
+      <div class="api-row">
+        <span class="api-method">GET</span>
+        <span class="api-path">/v2/{{ name }}/blobs/&#123;digest&#125;</span>
+        <span style="color:var(--text3)">Download image config blob — contains Env, Labels, history</span>
+      </div>
+    </div>
+  </div>
+
 </main>
+
 </body>
 </html>

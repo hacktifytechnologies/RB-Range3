@@ -31,6 +31,14 @@
 #sudo cat /home/devops/.ssh/authorized_keys
 #id devops
 # =============================================================================
+
+# =============================================================================
+# setup.sh — M1 · dev-jenkins · RNG-DEV-01 · VIKAS TANTRA
+# OPERATION GRIDFALL — Prabal Urja Limited NEXUS-IT
+# Challenge: Jenkins Anonymous Read Access + Unauthenticated Artifact Download
+# MITRE: T1190 · T1552.001
+# Ubuntu 22.04 LTS — NO internet access required
+# =============================================================================
 set -euo pipefail
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
@@ -62,6 +70,7 @@ log "Configuring Jenkins JVM options..."
 mkdir -p /etc/systemd/system/jenkins.service.d
 cat > /etc/systemd/system/jenkins.service.d/override.conf << 'SYSTEMD'
 [Service]
+Environment="JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64"
 Environment="JAVA_OPTS=-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"
 SYSTEMD
 
@@ -133,7 +142,7 @@ GROOVY
 log "Creating Jenkins build job: pul-firmware-build..."
 JOB_DIR="${JENKINS_HOME}/jobs/pul-firmware-build"
 mkdir -p "${JOB_DIR}/builds/1/archive/deploy-bundle"
-mkdir -p "${JOB_DIR}/builds/permalinks"
+
 
 # Job config.xml
 cat > "${JOB_DIR}/config.xml" << 'XML'

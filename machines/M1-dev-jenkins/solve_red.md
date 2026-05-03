@@ -55,6 +55,9 @@ You discover port **8080** open on `11.x.x.x` — Jenkins banner confirmed.
 curl -s http://11.x.x.x:8080/api/json | python3 -m json.tool | head -20
 ```
 
+<img width="1160" height="659" alt="image" src="https://github.com/user-attachments/assets/770ed92b-ab4d-45f8-be08-345c281df077" />
+
+
 Response confirms `useSecurity: false` — full API access without authentication.
 
 ---

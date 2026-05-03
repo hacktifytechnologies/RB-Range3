@@ -9,6 +9,8 @@
 grep "SETTINGS_QUERY" /var/log/pul-sonar/sonar.log
 # Shows: component=pul-firmware-ota from external IP
 ```
+<img width="1765" height="134" alt="image" src="https://github.com/user-attachments/assets/bee06e98-f462-4b4d-8792-92452026bbe5" />
+
 
 ### Snort Rule
 ```

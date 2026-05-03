@@ -41,6 +41,9 @@ nmap -sn 11.x.x.x/24 --open
 nmap -sV -p 8080,5000,9000,9200,8888,22 11.x.x.x/24
 ```
 
+<img width="1301" height="539" alt="image" src="https://github.com/user-attachments/assets/bcaffbc9-daac-4498-960f-44f256ccf83e" />
+
+
 You discover port **8080** open on `11.x.x.x` — Jenkins banner confirmed.
 
 ---

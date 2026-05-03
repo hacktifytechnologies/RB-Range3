@@ -4,7 +4,7 @@
 
 ---
 
-**Range:** RNG-DEV-01 · Code Forge (VIKAS TANTRA)
+**Range:** RNG-DEV-01 · Code Forge
 **Zone:** v-DMZ — `11.0.0.0/8` — Subnet: `11.x.x.x/24`
 **Entry:** SSH pivot from RNG-IT-02 M5 (dev-jump.prabalurja.in — `11.x.x.x`)
 **Pivot To:** RNG-CLD-01 (`193.x.x.x`) via Kubernetes service account token

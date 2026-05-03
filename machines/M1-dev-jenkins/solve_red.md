@@ -120,6 +120,9 @@ echo "cHVsLXJlZ2lzdHJ5LXN2YzpSZzVyeUBQVUwhQmxkMjQ=" | base64 -d
 
 **Pivot Credential:** `pul-registry-svc : Rg5try@PUL!Bld24` → M2 Container Registry (`11.x.x.x:5000`)
 
+<img width="941" height="116" alt="image" src="https://github.com/user-attachments/assets/60e568d9-f0fd-4d2c-8c7e-36d2797ec98d" />
+
+
 ---
 
 ## MITRE ATT&CK Mapping

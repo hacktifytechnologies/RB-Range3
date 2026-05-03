@@ -59,6 +59,9 @@ DIGEST="sha256:a4f3c2b1e8d7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1"
 curl -s "http://11.x.x.x:5000/v2/pul/firmware-builder/blobs/${DIGEST}" | python3 -m json.tool
 ```
 
+<img width="1468" height="1017" alt="image" src="https://github.com/user-attachments/assets/9f6e8f4d-1354-49a7-8240-f98fa70135d3" />
+
+
 ENV layer reveals:
 ```
 "ARTIFACT_STORE_HOST=11.x.x.x"

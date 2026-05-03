@@ -12,6 +12,10 @@ grep -E "v2/_catalog|manifests|blobs" /var/log/pul-registry/registry.log | \
 ```
 Signature: Anonymous catalogue enumeration followed by manifest and blob retrieval.
 
+<img width="2035" height="597" alt="image" src="https://github.com/user-attachments/assets/09b330d9-e64d-4efc-aaa6-56e6e09a58ce" />
+
+
+
 ### Snort/Suricata Rule
 ```
 alert http any any -> 11.x.x.x 5000 (

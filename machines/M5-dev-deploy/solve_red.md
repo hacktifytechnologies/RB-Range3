@@ -85,7 +85,12 @@ kubectl --kubeconfig /tmp/pul-k8s-prod.kubeconfig get namespaces
 <img width="1286" height="632" alt="image" src="https://github.com/user-attachments/assets/e906f2eb-b83d-4627-8d61-13573bac2195" />
 
 
+
+
 **PIVOT:** `193.x.x.x:6443` → RNG-CLD-01 Kubernetes cluster
+
+<img width="2012" height="215" alt="image" src="https://github.com/user-attachments/assets/2ce7ebe8-c9a6-4b67-8451-9cb71302e4d8" />
+
 
 ---
 ## MITRE Mapping

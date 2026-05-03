@@ -116,6 +116,6 @@ curl -s http://11.x.x.x:8888/api/applications -H "Authorization: Bearer dc-pul-d
 
 ---
 
-*RNG-DEV-01 · VIKAS TANTRA · OPERATION GRIDFALL*
+*RNG-DEV-01 · OPERATION GRIDFALL*
 *Classification: RESTRICTED — Exercise Staff Only*
 *Prabal Urja Limited NEXUS-IT Platform | © 2026 Hacktify Cybersecurity*

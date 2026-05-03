@@ -70,6 +70,9 @@ curl -s "http://11.x.x.x:8080/api/json?tree=jobs[name,url,lastBuild[result,artif
      | python3 -m json.tool
 ```
 
+<img width="2022" height="645" alt="image" src="https://github.com/user-attachments/assets/837b7162-f860-4bcd-8d34-f1c08796b871" />
+
+
 Observe the job `pul-firmware-build` with last build result `SUCCESS` and archived artefacts including `deploy-bundle/docker-config.json`.
 
 ---
@@ -101,6 +104,9 @@ Output:
   }
 }
 ```
+
+<img width="1639" height="619" alt="image" src="https://github.com/user-attachments/assets/9f01a76c-789a-4fbf-9ed7-c7bec088739c" />
+
 
 ---
 

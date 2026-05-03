@@ -14,7 +14,7 @@ Using the SonarQube admin token from M3 (`sqa_pul_admin_2024_gridfall`), authent
 ### Step 1 — Verify Token Against API
 ```bash
 curl -s http://11.x.x.x:9200/api/authentication/validate \
-     -H "Authorization: Bearer sqa_pul_admin_2024_gridfall"
+     -H "X-Sonar-Token: sqa_pul_admin_2024_gridfall"
 # {"valid":true}
 ```
 
